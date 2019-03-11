@@ -1,0 +1,14 @@
+[Unit]
+Description=Robot Service
+After=syslog.target network.target
+
+[Service]
+Type=simple
+User=nvidia
+#ExecStartPre=/home/robby/bin/robot-stop
+ExecStart=/bin/bash -c "source /opt/ros/kinetic/setup.bash && roslaunch /etc/robot.launch"
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

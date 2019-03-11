@@ -1,0 +1,5 @@
+ros-kinetic-desktop-full
+ros-kinetic-serial
+vim
+libi2c-dev
+i2c-tools
