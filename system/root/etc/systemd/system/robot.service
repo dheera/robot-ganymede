@@ -4,9 +4,9 @@ After=syslog.target network.target
 
 [Service]
 Type=simple
-User=nvidia
+User=pi
 #ExecStartPre=/home/robby/bin/robot-stop
-ExecStart=/bin/bash -c "source /opt/ros/kinetic/setup.bash && roslaunch /etc/robot.launch"
+ExecStart=/bin/bash -c "cd /home/pi/catkin_ws && source devel/setup.bash && roslaunch /etc/robot.launch"
 Restart=on-failure
 RestartSec=5
 
