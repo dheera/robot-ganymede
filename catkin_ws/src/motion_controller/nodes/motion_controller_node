@@ -19,6 +19,19 @@ def on_multiplier(msg):
 on_multiplier.last_multiplier = 1.0
 on_multiplier.last_multiplier_time = 0.0
 
+def relax_motors(motor_left_power, motor_right_power):
+    global pub_pwm_command, MOTOR_MAPPING, PWM_MAPPING
+
+    msg = Int32MultiArray()
+    msg.data = [-1] * 16
+    msg.data[PWM_MAPPING[MOTOR_LEFT][0]] = 0
+    msg.data[PWM_MAPPING[MOTOR_LEFT][1]] = 0
+    msg.data[PWM_MAPPING[MOTOR_LEFT][2]] = 0
+    msg.data[PWM_MAPPING[MOTOR_RIGHT][0]] = 0
+    msg.data[PWM_MAPPING[MOTOR_RIGHT][1]] = 0
+    msg.data[PWM_MAPPING[MOTOR_RIGHT][2]] = 0
+    pub_pwm_command.publish(msg)
+
 def set_motors(motor_left_power, motor_right_power):
     global pub_pwm_command, MOTOR_MAPPING, PWM_MAPPING
 
@@ -102,6 +115,7 @@ if __name__ == "__main__":
         if t - winning_time > 0.250:
             output_command.linear.x = 0
             output_command.angular.z = 0
+            relax_motors()
 
         # impose limits
 
