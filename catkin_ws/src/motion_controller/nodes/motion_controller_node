@@ -23,7 +23,7 @@ def set_motors(motor_left_power, motor_right_power):
     global pub_pwm_command, MOTOR_MAPPING, PWM_MAPPING
 
     msg = Int32MultiArray()
-    msg.data = [0] * 16
+    msg.data = [-1] * 16
 
     msg.data[PWM_MAPPING[MOTOR_LEFT][0]] = abs(int(motor_left_power))
     msg.data[PWM_MAPPING[MOTOR_RIGHT][0]] = abs(int(motor_right_power))

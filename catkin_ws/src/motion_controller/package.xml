@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-  <name>motion</name>
+  <name>motion_controller</name>
   <version>0.0.0</version>
   <description>motion</description>
   <maintainer email="dheera@dheera.net">dheera</maintainer>
