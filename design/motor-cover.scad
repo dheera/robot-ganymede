@@ -69,11 +69,15 @@ cylinder(d=m3_insert_d,h=5,$fn=32);
 translate([11,20,0])
 cylinder(d=m3_insert_d,h=5,$fn=32);
 
-translate([0,-19.5,0])
-cube_center([10,5,5]);
+translate([0,-22,0])
+cube_center([12,10,1]);
+translate([0,-24.5,1])
+cube_center([12,5,4]);
 
-translate([0,19.5,0])
-cube_center([10,5,5]);
+translate([0,22,0])
+cube_center([12,10,1]);
+translate([0,24.5,1])
+cube_center([12,5,4]);
 
 }
 
@@ -108,8 +112,6 @@ module cube_center(dims) {
     translate([-dims[0]/2, -dims[1]/2, 0])
     cube(dims);
 }
-
-
  
 module triangle() {
 rotate([0,-90,90])

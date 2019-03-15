@@ -113,7 +113,11 @@ module wheelbars() {
         translate([wheel_dist_l/2+w_off,batt_w/2 + t +7 - 38/2,t])
         rotate([0,0,180])
         difference() {
-            cube_center([12,38.001,9.5+50]);
+            union() {
+                cube_center([12,38.001,9.5+50]);
+                translate([0,-38/2+24+5/2,0])
+                cube_center([14,5,9.5+50]);
+            }
             translate([-4,-38/2+1+3.5/2,0])
             cube_center([3,3.5,0.5]);
             translate([-5.75,-38/2+1+3.5/2,0])
@@ -124,8 +128,8 @@ module wheelbars() {
             translate([-5.75,-38/2+5.75+2/2,0])
             cube_center([0.5,2,2]);
             
-            translate([0,-38/2+24+1/2,0])
-            cube_center([12,1,0.5]);
+            translate([0,-38/2+24+0.3/2,0])
+            cube_center([14,0.3,0.5]);
             
             translate([-12/2+1/2,-38/2+9+5/2,0])
             cube_center([1,5,1]);
@@ -135,7 +139,11 @@ module wheelbars() {
         
         translate([wheel_dist_l/2+w_off,-(batt_w/2 + t +7 - 38/2),t])
         difference() {
-            cube_center([12,38.001,9.5+50]);
+            union() {
+                cube_center([12,38.001,9.5+50]);
+                translate([0,-38/2+24+5/2,0])
+                cube_center([14,5,9.5+50]);
+            }
             translate([-4,-38/2+1+3.5/2,0])
             cube_center([3,3.5,0.5]);
             translate([-5.75,-38/2+1+3.5/2,0])
@@ -146,8 +154,8 @@ module wheelbars() {
             translate([-5.75,-38/2+5.75+2/2,0])
             cube_center([0.5,2,2]);
             
-            translate([0,-38/2+24+1/2,0])
-            cube_center([12,1,0.5]);
+            translate([0,-38/2+24+0.3/2,0])
+            cube_center([14,0.3,0.5]);
             
             translate([-12/2+1/2,-38/2+9+5/2,0])
             cube_center([1,5,1]);
@@ -169,20 +177,6 @@ translate([+batt_l/2+2*t+14,0,0])
     }
 }
 
-/*
-translate([-batt_l/2-t-2.5,-30,0])
-difference() {
-    cube_center([7,7,batt_h+t]);
-    cylinder(d=m3_insert_d,h=batt_h+t,$fn=32);
-}
-
-translate([-batt_l/2-t-2.5,30,0])
-difference() {
-    cube_center([7,7,batt_h+t]);
-    cylinder(d=m3_insert_d,h=batt_h+t,$fn=32);
-}
-*/
-
 module triangle() {
 scale([1,1,1])
 rotate([0,-90,90])
@@ -198,9 +192,21 @@ polygon(points=[[0,0],[5,7],[5,0]]);
 }
 
 translate([32,0,batt_h + t - top_space])
-cube_center([1,batt_w+2*7+2*t,1]);
+difference() {
+    cube_center([1,batt_w+2*7+2*t,1]);
+    translate([0,-17.5,0])
+    cube_center([5,5,5]);
+    translate([0,17.5,0])
+    cube_center([5,5,5]);
+}
 translate([32  +13,0,batt_h + t - top_space])
-cube_center([1,batt_w+2*7+2*t,1]);
+difference() {
+    cube_center([1,batt_w+2*7+2*t,1]);
+    translate([0,-17.5,0])
+    cube_center([5,5,5]);
+    translate([0,17.5,0])
+    cube_center([5,5,5]);
+}
 
 translate([-batt_l/2-t/2,0,batt_h+t]) {
     difference() {
