@@ -1,0 +1,63 @@
+#!/usr/bin/env node
+"use strict";
+
+const express = require('express');
+const http = require('http');
+const socketio = require('socket.io');
+const path = require('path');
+const ros = require('rosnodejs');
+const geometry_msgs = ros.require('geometry_msgs');
+
+const remoteConfig = {
+  "name": "ganymede",
+  "ui": {
+    "fixed": [
+       {
+         "type": "stick",
+         "name": "stick0",
+         "aspectRatio": 1.0,
+       }
+    ]
+  }
+}
+
+var app = express();
+var server = http.createServer(app);
+var io = socketio(server);
+app.use("/", express.static(path.join(__dirname, 'html')));
+
+ros.initNode('remote_node').then(() => {
+  console.log("ros node initialized")
+});
+
+const nh = ros.nh;
+const sub = nh.subscribe('/rosout', 'rosgraph_msgs/Log', (msg) => {
+  io.of("/robot").emit('rosout', msg);
+});
+const pub_motion = nh.advertise('/motion/level2', 'geometry_msgs/Twist')
+
+io.of("/robot").on('connection', (socket) => {
+  console.log('connection');
+
+  socket.emit("auth", {});
+
+  var interval = setInterval(() => {
+     socket.emit("status", {});
+  }, 3000);
+
+  socket.on("stick0", (msg) => {
+    let t = new geometry_msgs.msg.Twist();
+    if(!(typeof(msg[0]) === "number")) return;
+    if(!(typeof(msg[1]) === "number")) return;
+    if(!(typeof(msg[2]) === "number")) return;
+
+    t.linear.x = msg[0] || 0.0;
+    t.linear.y = msg[1] || 0.0;
+    t.angular.z = msg[2] || 0.0;
+    pub_motion.publish(t);
+  });
+});
+
+server.listen(8000, () => {
+  console.log("listening");
+});
