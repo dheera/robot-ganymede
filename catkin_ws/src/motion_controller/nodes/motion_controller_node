@@ -19,7 +19,7 @@ def on_multiplier(msg):
 on_multiplier.last_multiplier = 1.0
 on_multiplier.last_multiplier_time = 0.0
 
-def relax_motors(motor_left_power, motor_right_power):
+def relax_motors():
     global pub_pwm_command, MOTOR_MAPPING, PWM_MAPPING
 
     msg = Int32MultiArray()
