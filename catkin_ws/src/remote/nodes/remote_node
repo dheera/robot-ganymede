@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 "use strict";
 
-const express = require('express');
-const http = require('http');
-const socketio = require('socket.io');
-const path = require('path');
+const sshpk = require('sshpk');
+const fs = require('fs');
+const os = require('os');
+const io = require('socket.io-client');
 const ros = require('rosnodejs');
 const geometry_msgs = ros.require('geometry_msgs');
 
@@ -21,21 +21,57 @@ const remoteConfig = {
   }
 }
 
-var app = express();
-var server = http.createServer(app);
-var io = socketio(server);
-app.use("/", express.static(path.join(__dirname, 'html')));
+// ssh
 
+let publicKeyText = fs.readFileSync(os.homedir() + '/.ssh/id_rsa.pub');
+let privateKeyText = fs.readFileSync(os.homedir() + '/.ssh/id_rsa');
+let publicKey = sshpk.parseKey(publicKeyText, 'ssh');
+let privateKey = sshpk.parsePrivateKey(privateKeyText, 'ssh');
+
+// ros init
 ros.initNode('remote_node').then(() => {
   console.log("ros node initialized")
 });
-
 const nh = ros.nh;
+
+// subscribers
+
 const sub = nh.subscribe('/rosout', 'rosgraph_msgs/Log', (msg) => {
-  io.of("/robot").emit('rosout', msg);
+  socket.emit('rosout', msg);
 });
+
+// publishers
+
 const pub_motion = nh.advertise('/motion/level2', 'geometry_msgs/Twist')
 
+// socket.io
+
+var socket = io('https://robot.dheera.net/robot');
+
+socket.on('connect', () => {
+  console.log('connect');
+
+  socket.emit('auth_fingerprint', publicKey.fingerprint().toString());
+});
+
+socket.on('auth_verify', (msg, callback) => {
+  if(!msg.data) {
+    console.log('did not receive data to sign');
+    return;
+  }
+
+  let s = privateKey.createSign('sha256');
+  s.update(msg.data);
+  let signature = s.sign();
+  console.log(signature);
+  callback({signature: signature.toString(), type: signature.type});
+});
+
+socket.on('disconnect', () => {
+  console.log('disconnect');
+});
+
+/*
 io.of("/robot").on('connection', (socket) => {
   console.log('connection');
 
@@ -57,7 +93,4 @@ io.of("/robot").on('connection', (socket) => {
     pub_motion.publish(t);
   });
 });
-
-server.listen(8000, () => {
-  console.log("listening");
-});
+*/
