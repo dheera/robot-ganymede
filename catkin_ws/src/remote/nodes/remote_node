@@ -14,7 +14,7 @@ const remoteConfig = {
     "fixed": [
        {
          "type": "stick",
-         "name": "stick0",
+         "id": "stick0",
          "aspectRatio": 1.0,
        }
     ]
@@ -55,6 +55,7 @@ socket.on('connect', () => {
 });
 
 socket.on('auth_verify', (msg, callback) => {
+  console.log('auth_verify', msg);
   if(!msg.data) {
     console.log('did not receive data to sign');
     return;
@@ -63,34 +64,32 @@ socket.on('auth_verify', (msg, callback) => {
   let s = privateKey.createSign('sha256');
   s.update(msg.data);
   let signature = s.sign();
-  console.log(signature);
   callback({signature: signature.toString(), type: signature.type});
+});
+
+socket.on('e', (data) => {
+  console.log('e', data);
+  if(data[0] === "stick0") onStick(data[1]);
+});
+
+socket.on('auth_status', (status) => {
+  console.log('auth_status', status);
+  socket.emit('remote_config', remoteConfig);
 });
 
 socket.on('disconnect', () => {
   console.log('disconnect');
 });
 
-/*
-io.of("/robot").on('connection', (socket) => {
-  console.log('connection');
+function onStick(pos) {
+  if(pos.length !== 2) return;
+  if(!(typeof(pos[0]) === "number")) return;
+  if(!(typeof(pos[1]) === "number")) return;
 
-  socket.emit("auth", {});
-
-  var interval = setInterval(() => {
-     socket.emit("status", {});
-  }, 3000);
-
-  socket.on("stick0", (msg) => {
-    let t = new geometry_msgs.msg.Twist();
-    if(!(typeof(msg[0]) === "number")) return;
-    if(!(typeof(msg[1]) === "number")) return;
-    if(!(typeof(msg[2]) === "number")) return;
-
-    t.linear.x = msg[0] || 0.0;
-    t.linear.y = msg[1] || 0.0;
-    t.angular.z = msg[2] || 0.0;
-    pub_motion.publish(t);
-  });
-});
-*/
+  let t = new geometry_msgs.msg.Twist();
+  let x = pos[0];
+  let y = pos[1];
+  t.linear.x = -y/5;
+  t.angular.z = -x;
+  pub_motion.publish(t);
+}
