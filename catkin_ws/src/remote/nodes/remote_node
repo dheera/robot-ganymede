@@ -36,8 +36,13 @@ const nh = ros.nh;
 
 // subscribers
 
-const sub = nh.subscribe('/rosout', 'rosgraph_msgs/Log', (msg) => {
-  socket.emit('rosout', msg);
+const sub_rosout = nh.subscribe('/rosout_agg', 'rosgraph_msgs/Log', (msg) => {
+  if(msg.level < 3) return;
+  socket.emit('rosout', {
+    level: msg.level,
+    name: msg.name,
+    msg: msg.msg,
+  });
 });
 
 // publishers
