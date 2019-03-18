@@ -29,38 +29,39 @@ let publicKey = sshpk.parseKey(publicKeyText, 'ssh');
 let privateKey = sshpk.parsePrivateKey(privateKeyText, 'ssh');
 
 // ros init
+
+let nh = null;
+let sub_rosout = null;
+let pub_motion = null;
+
 ros.initNode('remote_node').then(() => {
-  console.log("ros node initialized")
-});
-const nh = ros.nh;
+  ros.log.info("initialized")
+  nh = ros.nh;
 
-// subscribers
-
-const sub_rosout = nh.subscribe('/rosout_agg', 'rosgraph_msgs/Log', (msg) => {
-  if(msg.level < 3) return;
-  socket.emit('rosout', {
-    level: msg.level,
-    name: msg.name,
-    msg: msg.msg,
+  sub_rosout = nh.subscribe('/rosout_agg', 'rosgraph_msgs/Log', (msg) => {
+    if(msg.level < 3) return;
+    socket.emit('rosout', {
+      level: msg.level,
+      name: msg.name,
+      msg: msg.msg,
+    });
   });
+
+  pub_motion = nh.advertise('/motion/level2', 'geometry_msgs/Twist')
+
 });
-
-// publishers
-
-const pub_motion = nh.advertise('/motion/level2', 'geometry_msgs/Twist')
 
 // socket.io
 
 var socket = io('https://robot.dheera.net/robot');
 
 socket.on('connect', () => {
-  console.log('connect');
-
+  ros.log.info('connecting');
   socket.emit('auth_fingerprint', publicKey.fingerprint().toString());
 });
 
 socket.on('auth_verify', (msg, callback) => {
-  console.log('auth_verify', msg);
+  ros.log.info('verifying')
   if(!msg.data) {
     console.log('did not receive data to sign');
     return;
@@ -78,12 +79,17 @@ socket.on('e', (data) => {
 });
 
 socket.on('auth_status', (status) => {
-  console.log('auth_status', status);
+  if(status !==1 ) {
+    ros.log.warn("authentication failed");
+    process.exit();
+  }
+  ros.log.info("authentication success");
   socket.emit('remote_config', remoteConfig);
 });
 
 socket.on('disconnect', () => {
-  console.log('disconnect');
+  console.log('disconnected');
+  process.exit();
 });
 
 function onStick(pos) {
