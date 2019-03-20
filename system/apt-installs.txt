@@ -1,5 +1,10 @@
-ros-kinetic-desktop-full
-ros-kinetic-serial
 vim
 libi2c-dev
 i2c-tools
+libraspberrypi-dev
+libtheora-dev
+libogg-dev
+libvorbis-dev
+screen
+npm
+
