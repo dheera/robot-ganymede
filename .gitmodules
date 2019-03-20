@@ -2,7 +2,7 @@
 	path = catkin_ws/src/ros-pwm-pca9685
 	url = https://github.com/dheera/ros-pwm-pca9685
 [submodule "catkin_ws/src/ros-bno055-i2c"]
-	path = catkin_ws/src/ros-bno055-i2c
+	path = catkin_ws/src/ros-imu-bno055
 	url = https://github.com/dheera/ros-bno055-i2c
 [submodule "catkin_ws/src/ros-system-stats"]
 	path = catkin_ws/src/ros-system-stats
