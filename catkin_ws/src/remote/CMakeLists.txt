@@ -17,8 +17,18 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
+
+execute_process(COMMAND npm install
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+
 catkin_install_python(PROGRAMS
   nodes/remote_node
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+install(DIRECTORY
+  nodes/node_modules
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
