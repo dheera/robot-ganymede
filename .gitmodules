@@ -11,14 +11,14 @@
 	path = catkin_ws/src/ros-power-ina219
 	url = https://github.com/dheera/ros-power-ina219
 [submodule "ros_catkin_ws/src/raspicam_node"]
-	path = rosbots_catkin_ws/src/raspicam_node
+	path = ros_catkin_ws/src/raspicam_node
 	url = https://github.com/UbiquityRobotics/raspicam_node
 [submodule "ros_catkin_ws/src/image_transport_plugins"]
-	path = rosbots_catkin_ws/src/image_transport_plugins
+	path = ros_catkin_ws/src/image_transport_plugins
 	url = https://github.com/ros-perception/image_transport_plugins
 [submodule "ros_catkin_ws/src/dynamic_reconfigure"]
-	path = rosbots_catkin_ws/src/dynamic_reconfigure
+	path = ros_catkin_ws/src/dynamic_reconfigure
 	url = https://github.com/ros/dynamic_reconfigure
 [submodule "ros_catkin_ws/src/common_msgs"]
-	path = rosbots_catkin_ws/src/common_msgs
+	path = ros_catkin_ws/src/common_msgs
 	url = https://github.com/ros/common_msgs
