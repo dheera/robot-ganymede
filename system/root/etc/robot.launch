@@ -1,12 +1,24 @@
 <launch>
-    <!-- <node ns="imu" name="imu_node" pkg="imu_bno055_i2c" type="imu_bno055_i2c_node" respawn="true" respawn_delay="2">
-        <param name="device" type="string" value="/dev/i2c-1"/>
+    <node ns="imu" name="imu_node" pkg="imu_bno055" type="bno055_i2c_node" respawn="true" respawn_delay="2">
+        <param name="device" type="string" value="/dev/i2c-3"/>
         <param name="address" type="int" value="40"/>
+        <param name="rate" type="int" value="30"/>
         <param name="frame_id" type="string" value="imu"/>
-    </node> -->
-    <node ns="pwm" name="pwm_node" pkg="pwm_pca9685" type="pwm_pca9685_node" respawn="true" respawn_delay="2">
+    </node>
+    <node ns="pwm" name="pwm_node" pkg="pwm_pca9685" type="pca9685_node" respawn="true" respawn_delay="2">
+        <param name="device" type="string" value="/dev/i2c-1"/>
         <param name="frame_id" type="string" value="pwm"/>
     </node>
-    <node ns="status" name="status_system_node" pkg="status_system" type="status_system_node" respawn="true" respawn_delay="2">
+    <node name="power_node" pkg="power_ina219" type="ina219_node" respawn="true" respawn_delay="2">
+        <param name="device" type="string" value="/dev/i2c-1"/>
+        <param name="frame_id" type="string" value="power"/>
+    </node>
+    <node ns="motion" name="motion_controller_node" pkg="motion_controller" type="motion_controller_node" respawn="true" respawn_delay="2">
+        <param name="flip_left" type="bool" value="true"/>
+        <param name="flip_right" type="bool" value="true"/>
+    </node>
+    <node ns="system" name="system_stats_node" pkg="system_stats" type="system_stats_node" respawn="true" respawn_delay="2">
+    </node>
+    <node ns="system" name="remote_node" pkg="remote" type="remote_node" respawn="true" respawn_delay="2">
     </node>
 </launch>
