@@ -22,3 +22,6 @@
 [submodule "ros_catkin_ws/src/common_msgs"]
 	path = ros_catkin_ws/src/common_msgs
 	url = https://github.com/ros/common_msgs
+[submodule "catkin_ws/src/ros-tof-mappydot-plus"]
+	path = catkin_ws/src/ros-tof-mappydot-plus
+	url = git@github.com:/dheera/ros-tof-mappydot-plus
