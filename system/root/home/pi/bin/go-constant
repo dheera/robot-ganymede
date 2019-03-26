@@ -11,6 +11,5 @@ if [[ $# -eq 0 ]] ; then
     exit 0
 fi
 
-source /opt/ros/kinetic/setup.bash
-rostopic pub -v -r 10 /motion/level3 geometry_msgs/Twist  "{linear:  {x: $1, y: 0.0, z: 0.0}, angular: {x: 0.0,y: 0.0,z: $2}}"
+rostopic pub -v -r 10 /motion/level1 geometry_msgs/Twist  "{linear:  {x: $1, y: 0.0, z: 0.0}, angular: {x: 0.0,y: 0.0,z: $2}}"
 
