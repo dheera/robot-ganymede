@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 "use strict";
 
+const DATA_IN = 'i';
+const DATA_OUT = 'o';
+
 const sshpk = require('sshpk');
 const fs = require('fs');
 const os = require('os');
@@ -73,9 +76,12 @@ socket.on('auth_verify', (msg, callback) => {
   callback({signature: signature.toString(), type: signature.type});
 });
 
-socket.on('e', (data) => {
-  console.log('e', data);
-  if(data[0] === "stick0") onStick(data[1]);
+socket.on(DATA_IN, (data) => {
+  console.log('DATA_IN', data);
+  let id = data[0];
+  let key = data[1];
+  let value = data[2];
+  if(id === "stick0" && key === "v") onStick(data[2]);
 });
 
 socket.on('auth_status', (status) => {
