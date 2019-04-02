@@ -12,7 +12,7 @@ const ros = require('rosnodejs');
 const geometry_msgs = ros.require('geometry_msgs');
 
 const remoteConfig = {
-  "name": "ganymede",
+  "name": os.hostname(),
   "ui": {
     "fixed": [
        {
