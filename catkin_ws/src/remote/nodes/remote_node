@@ -14,11 +14,10 @@ const geometry_msgs = ros.require('geometry_msgs');
 const remoteConfig = {
   "name": os.hostname(),
   "ui": {
-    "fixed": [
+    "widgets": [
        {
          "type": "stick",
          "id": "stick0",
-         "aspectRatio": 1.0,
        }
     ]
   }
